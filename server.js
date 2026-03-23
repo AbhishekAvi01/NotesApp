@@ -8,25 +8,28 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
-
+// --- CORS CONFIGURATION (Sahi Tarika) ---
 app.use(cors({
-  origin: '*', // Production mein yahan apna Netlify URL daal dena
+  origin: '*', // Jab sab chal jaye, toh '*' ki jagah apna Netlify URL daal dena
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
+app.use(express.json());
+
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/notes', require('./routes/noteRoutes')); // Naya line add karein
+app.use('/api/notes', require('./routes/noteRoutes'));
 
-// Error Handling (Professional touch)
+// Root route (Testing ke liye)
+app.get('/', (req, res) => {
+  res.send('API is running successfully...');
+});
+
+// Error Handling
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode);
-  res.json({
+  res.status(statusCode).json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,
   });
