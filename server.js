@@ -11,6 +11,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+app.use(cors({
+  origin: '*', // Production mein yahan apna Netlify URL daal dena
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/notes', require('./routes/noteRoutes')); // Naya line add karein
